@@ -4,6 +4,6 @@ import com.yhz.mybatis.po.User;
 
 public interface IUserDao {
 
-   String queryUserInfoById(Long id);
+   User queryUserInfoById(Long id);
 
 }
