@@ -4,6 +4,7 @@ import com.yhz.mybatis.session.Configuration;
 import com.yhz.mybatis.type.JdbcType;
 
 /**
+ * 参数映射 #{property,javaType=int,jdbcType=NUMERIC}
  * @author yanhuanzhan
  * @date 2023/3/8 - 16:08
  */
@@ -24,9 +25,10 @@ public class ParameterMapping {
 
         private ParameterMapping parameterMapping = new ParameterMapping();
 
-        public Builder(Configuration configuration, String property) {
+        public Builder(Configuration configuration, String property, Class<?> javaType) {
             parameterMapping.configuration = configuration;
             parameterMapping.property = property;
+            parameterMapping.javaType = javaType;
         }
 
         public Builder javaType(Class<?> javaType) {
@@ -39,6 +41,9 @@ public class ParameterMapping {
             return this;
         }
 
+        public ParameterMapping build() {
+            return parameterMapping;
+        }
     }
 
     public Configuration getConfiguration() {
@@ -56,5 +61,6 @@ public class ParameterMapping {
     public JdbcType getJdbcType() {
         return jdbcType;
     }
+
 
 }

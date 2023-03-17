@@ -1,21 +1,9 @@
 package com.yhz.mybatis.session.defaults;
 
-import com.yhz.mybatis.binding.MapperRegistry;
 import com.yhz.mybatis.executor.Executor;
-import com.yhz.mybatis.mapping.BoundSql;
-import com.yhz.mybatis.mapping.Environment;
 import com.yhz.mybatis.mapping.MappedStatement;
 import com.yhz.mybatis.session.Configuration;
 import com.yhz.mybatis.session.SqlSession;
-
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,7 +25,7 @@ public class DefaultSqlSession implements SqlSession {
     @Override
     public <T> T selectOne(String statement, Object parameter) {
         MappedStatement ms = configuration.getMappedStatement(statement);
-        List<T> list = executor.query(ms, parameter, Executor.NO_RESULT_HANDLER, ms.getBoundSql());
+        List<T> list = executor.query(ms, parameter, Executor.NO_RESULT_HANDLER, ms.getSqlSource().getBoundSql(parameter));
         return list.get(0);
     }
 

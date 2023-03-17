@@ -66,6 +66,12 @@
             </exclusions>
         </dependency>
         <!-- LOGGING end -->
+        <!-- https://mvnrepository.com/artifact/ognl/ognl -->
+        <dependency>
+            <groupId>ognl</groupId>
+            <artifactId>ognl</artifactId>
+            <version>3.3.2</version>
+        </dependency>
     </dependencies>
 
 

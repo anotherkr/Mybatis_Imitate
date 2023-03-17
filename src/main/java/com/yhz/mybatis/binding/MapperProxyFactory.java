@@ -16,7 +16,7 @@ public class MapperProxyFactory<T> {
 //    那么每一个创建代理类的操作，都需要自己使用 Proxy.newProxyInstance 进行处理，
 //    那么这样的操作方式就显得比较麻烦了。
 
-private final Class<T> mapperInterface;
+    private final Class<T> mapperInterface;
 
     private Map<Method, MapperMethod> methodCache = new ConcurrentHashMap<>();
 
