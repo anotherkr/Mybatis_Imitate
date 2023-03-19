@@ -8,5 +8,9 @@
         FROM user
         where id = #{id}
     </select>
-
+    <select id="queryUserInfo" parameterType="com.yhz.mybatis.po.User" resultType="com.yhz.mybatis.po.User">
+        SELECT id, userId, userHead, userName
+        FROM user
+        where id = #{id}
+    </select>
 </mapper>

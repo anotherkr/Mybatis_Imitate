@@ -12,6 +12,13 @@ public class User {
     private String userHead;        // 头像
     private String userName;        // 头像
 
+    public User(Long id, String userId, String userHead, String userName) {
+        this.id = id;
+        this.userId = userId;
+        this.userHead = userHead;
+        this.userName = userName;
+    }
+
     public String getUserName() {
         return userName;
     }
@@ -44,6 +51,8 @@ public class User {
         this.userHead = userHead;
     }
 
+    public User() {
+    }
 
     @Override
     public String toString() {

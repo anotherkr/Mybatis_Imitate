@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.List;
 
 /**
+ * 预处理语句处理器
  * @author yanhuanzhan
  * @date 2023/3/13 - 15:22
  */
@@ -28,8 +29,7 @@ public class PreparedStatementHandler extends BaseStatementHandler{
 
     @Override
     public void parameterize(Statement statement) throws SQLException {
-        PreparedStatement ps = (PreparedStatement) statement;
-        ps.setLong(1, Long.parseLong(((Object[]) parameterObject)[0].toString()));
+        parameterHandler.setParameters((PreparedStatement) statement);
     }
 
     @Override

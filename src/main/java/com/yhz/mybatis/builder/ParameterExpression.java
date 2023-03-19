@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 /**
  * 参数表达式
+ * 该类用于解析形如 #{property,javaType=int,jdbcType=NUMERIC} 的字符串，
+ * 将其中的属性、javaType、jdbcType 和其他选项解析成键值对的形式，存储到 HashMap 中，方便后续使用。
  * @author yanhuanzhan
  * @date 2023/3/15 - 16:05
  */
