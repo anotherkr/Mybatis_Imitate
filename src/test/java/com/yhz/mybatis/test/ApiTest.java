@@ -171,4 +171,22 @@ public class ApiTest {
         logger.info("测试结果：{}", JSON.toJSONString(user));
 
     }
+    @Test
+    public void test_11() throws IOException {
+        // 1. 获取映射器对象
+        Reader reader = Resources.getResourceAsReader("mybatis-config-datasource.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        IUserDao userDao = sqlSession.getMapper(IUserDao.class);
+        // 2. 测试验证
+        User user = new User();
+        user.setId(4L);
+        user.setUserId("10002");
+        user.setUserName("小黑");
+        user.setUserHead("1_05");
+        userDao.updateUserInfo(user);
+
+        // 3. 提交事务
+        sqlSession.commit();
+    }
 }

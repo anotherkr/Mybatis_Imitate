@@ -3,6 +3,7 @@ package com.yhz.mybatis.mapping;
 import com.yhz.mybatis.scripting.LanguageDriver;
 import com.yhz.mybatis.session.Configuration;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,8 +19,14 @@ public class MappedStatement {
     private SqlSource sqlSource;
     Class<?> resultType;
     private LanguageDriver lang;
+    private List<ResultMap> resultMaps;
     MappedStatement() {
         // constructor disabled
+    }
+
+    public BoundSql getBoundSql(Object parameterObject) {
+        // 调用 SqlSource#getBoundSql
+        return sqlSource.getBoundSql(parameterObject);
     }
 
     /**
@@ -42,6 +49,14 @@ public class MappedStatement {
             assert mappedStatement.configuration != null;
             assert mappedStatement.id != null;
             return mappedStatement;
+        }
+        public String id() {
+            return mappedStatement.id;
+        }
+
+        public Builder resultMaps(List<ResultMap> resultMaps) {
+            mappedStatement.resultMaps = resultMaps;
+            return this;
         }
 
     }
@@ -69,5 +84,7 @@ public class MappedStatement {
         return lang;
     }
 
-
+    public List<ResultMap> getResultMaps() {
+        return resultMaps;
+    }
 }

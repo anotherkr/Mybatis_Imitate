@@ -4,6 +4,7 @@ import com.yhz.mybatis.mapping.BoundSql;
 import com.yhz.mybatis.mapping.MappedStatement;
 import com.yhz.mybatis.session.Configuration;
 import com.yhz.mybatis.session.ResultHandler;
+import com.yhz.mybatis.session.RowBounds;
 import com.yhz.mybatis.transaction.Transaction;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +19,7 @@ import java.util.List;
  * @date 2023/3/13 - 15:23
  */
 public abstract class BaseExecutor implements Executor{
+
     private org.slf4j.Logger logger = LoggerFactory.getLogger(BaseExecutor.class);
 
     protected Configuration configuration;
@@ -33,14 +35,21 @@ public abstract class BaseExecutor implements Executor{
     }
 
     @Override
-    public <E> List<E> query(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
+    public int update(MappedStatement ms, Object parameter) throws SQLException {
+        return doUpdate(ms, parameter);
+    }
+
+    @Override
+    public <E> List<E> query(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
         if (closed) {
             throw new RuntimeException("Executor was closed.");
         }
-        return doQuery(ms, parameter, resultHandler, boundSql);
+        return doQuery(ms, parameter, rowBounds, resultHandler, boundSql);
     }
 
-    protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql);
+    protected abstract int doUpdate(MappedStatement ms, Object parameter) throws SQLException;
+
+    protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException;
 
     @Override
     public Transaction getTransaction() {
@@ -84,4 +93,5 @@ public abstract class BaseExecutor implements Executor{
             closed = true;
         }
     }
+
 }

@@ -28,16 +28,30 @@ public class MapperMethod {
     public Object execute(SqlSession sqlSession, Object[] args) {
         Object result = null;
         switch (command.getType()) {
-            case INSERT:
-                break;
-            case DELETE:
-                break;
-            case UPDATE:
-                break;
-            case SELECT:
+            case INSERT: {
                 Object param = method.convertArgsToSqlCommandParam(args);
-                result = sqlSession.selectOne(command.getName(), param);
+                result = sqlSession.insert(command.getName(), param);
                 break;
+            }
+            case DELETE: {
+                Object param = method.convertArgsToSqlCommandParam(args);
+                result = sqlSession.delete(command.getName(), param);
+                break;
+            }
+            case UPDATE: {
+                Object param = method.convertArgsToSqlCommandParam(args);
+                result = sqlSession.update(command.getName(), param);
+                break;
+            }
+            case SELECT: {
+                Object param = method.convertArgsToSqlCommandParam(args);
+                if (method.returnsMany) {
+                    result = sqlSession.selectList(command.getName(), param);
+                } else {
+                    result = sqlSession.selectOne(command.getName(), param);
+                }
+                break;
+            }
             default:
                 throw new RuntimeException("Unknown execution method for: " + command.getName());
         }
@@ -72,10 +86,13 @@ public class MapperMethod {
      */
     public static class MethodSignature {
 
+        private final boolean returnsMany;
+        private final Class<?> returnType;
         private final SortedMap<Integer, String> params;
 
         public MethodSignature(Configuration configuration, Method method) {
-            //使用这个方法可以很方便地创建一个只读的 SortedMap，从而确保映射关系不会被改变。
+            this.returnType = method.getReturnType();
+            this.returnsMany = (configuration.getObjectFactory().isCollection(this.returnType) || this.returnType.isArray());
             this.params = Collections.unmodifiableSortedMap(getParams(method));
         }
 
@@ -88,7 +105,7 @@ public class MapperMethod {
                 return args[params.keySet().iterator().next().intValue()];
             } else {
                 // 否则，返回一个ParamMap，修改参数名，参数名就是其位置
-                final Map<String, Object> param = new ParamMap<>();
+                final Map<String, Object> param = new ParamMap<Object>();
                 int i = 0;
                 for (Map.Entry<Integer, String> entry : params.entrySet()) {
                     // 1.先加一个#{0},#{1},#{2}...参数
@@ -116,10 +133,13 @@ public class MapperMethod {
             final Class<?>[] argTypes = method.getParameterTypes();
             for (int i = 0; i < argTypes.length; i++) {
                 String paramName = String.valueOf(params.size());
-                // 不做 Param 的实现，这部分不处理。如果扩展学习，需要添加 Param 注解并做扩展实现。
                 params.put(i, paramName);
             }
             return params;
+        }
+
+        public boolean returnsMany() {
+            return returnsMany;
         }
 
     }
